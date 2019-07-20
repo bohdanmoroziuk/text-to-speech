@@ -1,5 +1,9 @@
 import React, { FunctionComponent } from 'react';
 
+/**
+ * TODO:
+ *  1. Rewrite using Redux-Form 
+ */
 const SynthesisForm: FunctionComponent<any> = ({ values, onChange, onSubmit }) => (
   <form 
     className="form pt-5"

@@ -5,6 +5,10 @@ import SynthesisForm from 'components/forms/SynthesisForm';
 
 import SynthService from 'services/synth';
 
+/**
+ * TODO:
+ *  1. Rewrite logic using Redux
+ */
 export default class App extends Component {
   state = {
     text: '',
