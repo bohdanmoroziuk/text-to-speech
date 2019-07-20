@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, ChangeEvent, FormEvent } from 'react';
 
-const App: React.FC = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Template from 'components/layout/Template';
+import SynthesisForm from 'components/forms/SynthesisForm';
+
+import SynthService from 'services/synth';
+
+/**
+ * TODO:
+ *  1. Rewrite logic using Redux
+ */
+export default class App extends Component {
+  state = {
+    text: '',
+    rate: 1,
+    pitch: 1,
+    lang: '',
+  }
+
+  handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+
+    this.setState({ 
+      [name]: value 
+    });
+  }
+
+  handleSubmit = (event: FormEvent) => {
+    event.preventDefault();
+
+    SynthService.speak(this.state);
+  }
+
+  render() {
+    const voices: SpeechSynthesisVoice[] = SynthService.getVoices();
+
+    return (
+      <div className="app">
+        <Template>
+          <SynthesisForm
+            values={{
+              ...this.state,
+              voices
+            }}
+            onChange={this.handleChange}
+            onSubmit={this.handleSubmit}
+          />
+        </Template>
+      </div>
+    );
+  }
 }
-
-export default App;
