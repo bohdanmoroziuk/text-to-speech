@@ -1,52 +1,27 @@
-import React, { Component, ChangeEvent, FormEvent } from 'react';
+import React, { FunctionComponent } from 'react';
 
 import Template from 'components/layout/Template';
 import SynthesisForm from 'components/forms/SynthesisForm';
 
 import SynthService from 'services/synth';
 
-/**
- * TODO:
- *  1. Rewrite logic using Redux
- */
-export default class App extends Component {
-  state = {
-    text: '',
-    rate: 1,
-    pitch: 1,
-    lang: '',
-  }
+const App: FunctionComponent = () => {
+  const voices: SpeechSynthesisVoice[] = SynthService.getVoices();
 
-  handleChange = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = event.target;
+  const submit = (values: any) => {
+    SynthService.speak(values);
+  };
 
-    this.setState({ 
-      [name]: value 
-    });
-  }
+  return (
+    <div className="app">
+      <Template>
+        <SynthesisForm
+          voices={voices}
+          onSubmit={submit}
+        />
+      </Template>
+    </div>
+  );
+};
 
-  handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-
-    SynthService.speak(this.state);
-  }
-
-  render() {
-    const voices: SpeechSynthesisVoice[] = SynthService.getVoices();
-
-    return (
-      <div className="app">
-        <Template>
-          <SynthesisForm
-            values={{
-              ...this.state,
-              voices
-            }}
-            onChange={this.handleChange}
-            onSubmit={this.handleSubmit}
-          />
-        </Template>
-      </div>
-    );
-  }
-}
+export default App;
